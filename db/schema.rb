@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180815061407) do
+ActiveRecord::Schema.define(version: 20180817010653) do
 
   create_table "inventories", force: :cascade do |t|
     t.string   "item"
@@ -31,8 +31,9 @@ ActiveRecord::Schema.define(version: 20180815061407) do
     t.float    "latitude"
     t.float    "longitude"
     t.integer  "contamination_count",           default: 0
-    t.datetime "created_at",                                null: false
-    t.datetime "updated_at",                                null: false
+    t.datetime "created_at",                                    null: false
+    t.datetime "updated_at",                                    null: false
+    t.boolean  "is_infected",                   default: false
   end
 
 end

@@ -6,6 +6,11 @@ class SurvivorsController < ApplicationController
     @survivors = Survivor.all
     render json: @survivors
   end
+  # GET /survivors/:id
+  def show
+    render json: @survivor
+  end
+
   # POST /survivors
   def create
     @survivor = Survivor.new(survivor_params)
@@ -22,6 +27,17 @@ class SurvivorsController < ApplicationController
     if update_params.present?
       @survivor.update_attributes(latitude: update_params[:latitude], longitude: update_params[:longitude])
       head :no_content
+    end
+  end
+
+  # POST /survivors/:id/flag_infection
+  def flag_infection
+    # @survivor.inc(infection_count: 1)
+
+    if @survivor.infected?
+      render json: { message: "Warning! Infected survivor reported as infected #{@survivor.infection_count} time(s)!" }, status: :ok
+    else
+      render json: { message: "Attention! Survivor was reported as infected #{@survivor.infection_count} time(s)!" },status: :ok
     end
   end
 

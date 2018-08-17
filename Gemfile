@@ -47,3 +47,4 @@ end
 
 gem "rails-api"
 gem 'table_print'
+gem 'active_model_serializers', '~> 0.10.0'
