@@ -45,3 +45,5 @@ group :development do
   gem 'spring'
 end
 
+gem "rails-api"
+gem 'table_print'
