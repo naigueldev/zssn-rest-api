@@ -1,4 +1,4 @@
 class InventorySerializer < ActiveModel::Serializer
-  attributes :item, :points, :quantity
+  attributes :item, :quantity, :points
   belongs_to :survivor
 end

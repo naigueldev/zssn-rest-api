@@ -3,7 +3,7 @@ class SurvivorsController < ApplicationController
 
   # GET /survivors
   def index
-    @survivors = Survivor.all
+    @survivors = Survivor.all.where(is_infected: false)
     render json: @survivors
   end
   # GET /survivors/:id
@@ -14,7 +14,7 @@ class SurvivorsController < ApplicationController
   # POST /survivors
   def create
     @survivor = Survivor.new(survivor_params)
-
+    set_points(@survivor)
     if @survivor.save
       render json: @survivor, status: :created, location: @survivor
     else
@@ -30,14 +30,14 @@ class SurvivorsController < ApplicationController
     end
   end
 
-  # POST /survivors/:id/flag_infection
-  def flag_infection
-    # @survivor.inc(infection_count: 1)
-
+  # POST /survivors/:id/report_infection
+  def report_infection
+    @survivor.increment!(:contamination_count, 1)
     if @survivor.infected?
-      render json: { message: "Warning! Infected survivor reported as infected #{@survivor.infection_count} time(s)!" }, status: :ok
+      @survivor.infected_survivor
+      render json: { message: "Infected survivor! Reported as infected #{@survivor.contamination_count} times." }, status: :ok
     else
-      render json: { message: "Attention! Survivor was reported as infected #{@survivor.infection_count} time(s)!" },status: :ok
+      render json: { message: "Survivor reported as infected #{@survivor.contamination_count} times" }, status: :ok
     end
   end
 
@@ -52,11 +52,24 @@ class SurvivorsController < ApplicationController
   end
 
   def survivor_params
-    params.permit(:name, :age, :gender, :latitude, :longitude, :inventories_attributes=>[:survivor_id, :item, :points, :quantity])
+    params.permit(:name, :age, :gender, :latitude, :longitude, :is_infected, :contamination_count, :inventories_attributes=>[:survivor_id, :item, :points, :quantity])
   end
 
   def update_params
     params.require(:survivor).permit(:latitude, :longitude)
+  end
+
+  def set_points(survivor)
+    survivor.inventories.each do |inv|
+      item = inv[:item].downcase
+      data = JSON.parse(Inventory.list_items)
+      data.each do |elem|
+        @value = elem["points"]if item.eql?(elem["item"].downcase)
+      end
+      calc = @value * inv[:quantity]
+      inv[:points] = calc
+    end
+
   end
 
 end
