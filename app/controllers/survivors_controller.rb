@@ -14,7 +14,7 @@ class SurvivorsController < ApplicationController
   # POST /survivors
   def create
     @survivor = Survivor.new(survivor_params)
-    set_points(@survivor)
+    @survivor.set_points(@survivor)
     if @survivor.save
       render json: @survivor, status: :created, location: @survivor
     else
@@ -59,17 +59,6 @@ class SurvivorsController < ApplicationController
     params.require(:survivor).permit(:latitude, :longitude)
   end
 
-  def set_points(survivor)
-    survivor.inventories.each do |inv|
-      item = inv[:item].downcase
-      data = JSON.parse(Inventory.list_items)
-      data.each do |elem|
-        @value = elem["points"]if item.eql?(elem["item"].downcase)
-      end
-      calc = @value * inv[:quantity]
-      inv[:points] = calc
-    end
 
-  end
 
 end
