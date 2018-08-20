@@ -21,4 +21,8 @@ class Inventory < ActiveRecord::Base
       }
     ].to_json
   end
+
+  def self.type_item(type)
+    where('lower(item) = ?', type.downcase)
+  end
 end
