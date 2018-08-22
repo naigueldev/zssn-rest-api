@@ -1,7 +1,9 @@
 class Survivor < ActiveRecord::Base
+  INFECTION_THRESHOLD = 3
+
   has_many :inventories, dependent: :delete_all
   accepts_nested_attributes_for :inventories
-  validates :name, :age, :gender, :latitude, :longitude, presence: true
+  validates_presence_of :name, :age, :gender, :latitude, :longitude
 
 
   def set_points(survivor)
@@ -73,8 +75,6 @@ class Survivor < ActiveRecord::Base
       end
     end
   end
-
-
   def self.infected_survivor_count
     self.infecteds.count.to_f
   end
@@ -84,29 +84,9 @@ class Survivor < ActiveRecord::Base
   def self.survivor_count
     self.not_infected.count.to_f
   end
-  def self.infected_survivors
-    percentage(infecteds.size)
-  end
-
-  def uninfected_survivors
-    percentage(uninfecteds.size)
-  end
-
-  def points_lost
-    points_lost = infecteds.sum(:points)
-    return "#{points_lost} points lost due to #{infecteds.size} infected survivors."
-  end
-
-
-  def percentage(part)
-    whole = Survivor.all.size
-    return ((part.to_f / whole.to_f) * 100).round(3).to_s + "%"
-  end
-
   def self.infecteds
     where(is_infected: true)
   end
-
   def self.not_infected
     where(is_infected: false)
   end

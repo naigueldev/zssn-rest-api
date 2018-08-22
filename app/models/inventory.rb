@@ -1,6 +1,5 @@
 class Inventory < ActiveRecord::Base
   belongs_to :survivor
-
   def self.list_items
     list = [
       {
@@ -21,7 +20,6 @@ class Inventory < ActiveRecord::Base
       }
     ].to_json
   end
-
   def self.type_item(type)
     where('lower(item) = ?', type.downcase)
   end

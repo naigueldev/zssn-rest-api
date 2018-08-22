@@ -4,8 +4,8 @@ class Trade
     @message = ""
     @status = nil
     @trade_params = [params[:survivor_one], params[:survivor_two]]
-    @survivor_one_id = params[:survivor_one][:id]
-    @survivor_two_id = params[:survivor_two][:id]
+    @survivor_one_id = params[:survivor_one][:id].to_i
+    @survivor_two_id = params[:survivor_two][:id].to_i
     @survivor_one = @survivor_two = nil
     @survivor_one_inventories_params = params[:survivor_one][:inventories]
     @survivor_two_inventories_params = params[:survivor_two][:inventories]
@@ -23,7 +23,7 @@ class Trade
   end
   private
   def validate_survivors
-    if Survivor.exists?(id: @survivor_one_id) && Survivor.exists?(id: @survivor_two_id)
+    if Survivor.exists?(id: @survivor_one_id.to_i) && Survivor.exists?(id: @survivor_two_id.to_i)
       is_different_survivor?(@survivor_one_id,@survivor_two_id)
     else
       id = []
