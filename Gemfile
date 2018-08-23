@@ -37,7 +37,6 @@ group :development, :test do
   gem 'byebug'
   gem 'rspec-rails', '~> 3.7'
   gem 'factory_girl_rails'
-  gem 'simplecov'
   gem 'faker'
 
 end
