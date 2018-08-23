@@ -18,6 +18,8 @@ Then, run `rails s`, and it will be available at http://localhost:3000
 
 ## API Documentation
 
+## PDF Documentation available in public folder
+
 * **POST /survivors**
 
 ```
